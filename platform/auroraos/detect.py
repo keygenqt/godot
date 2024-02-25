@@ -14,21 +14,18 @@ def get_name():
 def can_build():
     if os.name != "auroraos":
         return False
-
-    if not os.environ['PSDK_DIR']:
-        print("Not found Aurora Platform SDK environment variable.")
-
-    pkgconf_error = os.system("pkg-config --version > /dev/null")
-    if pkgconf_error:
-        print("Error: pkg-config not found. Aborting.")
-        return False
-
     return True
 
 
 def get_opts():
+    from SCons.Variables import PathVariable
     return [
-
+        PathVariable(
+            'psdk',
+            help='Where Aurora Platform SDK installed',
+            default=os.environ['PSDK_DIR'],
+            validator=PathVariable.PathIsDir(),
+        )
     ]
 
 
